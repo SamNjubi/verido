@@ -1,0 +1,79 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+###############################################
+
+# Do not add package-lock.json to .gitignore.
+# The file is used in our CI pipelines.
+
+###############################################
+
+
+# compiled output
+/tmp
+/out-tsc
+/dist
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.gradle
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Development settings
+.npmrc
+.env
+
+# test generated files
+/test-results
+apps/payer-e2e/cypress/downloads
+
+# Angular output + generated Dockerfiles
+/build
+
+# sonar output directory
+/.scannerwork
+
+# nx cache
+.nx/cache/*
+
+# Generated language files (see language.js and readme on what this is about)
+portals/provider-portal/src/assets/i18n/en-custom.json
+portals/payer-portal/src/assets/i18n/en-custom.json
+
+# Storybook
+storybook-static
+report.*
+
+Makefile
+apps/payer-e2e/data
+apps/payer-e2e/assets/reports
+
+.angular

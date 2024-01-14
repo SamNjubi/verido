@@ -22,20 +22,20 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-                "echarts",
-                "highlight.js",
-                "angular2-text-mask"
+              "echarts",
+              "highlight.js",
+              "angular2-text-mask"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "node_modules/@swimlane/ngx-datatable/index.css",
+              "node_modules/@swimlane/ngx-datatable/themes/material.css",
+              "node_modules/@swimlane/ngx-datatable/assets/icons.css",
               "src/assets/styles/app/_app.scss",
               "src/styles.css"
             ],
@@ -96,15 +96,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": [
-            ],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "styles": ["src/styles.css"],
+            "scripts": [],
+            "assets": ["src/favicon.ico", "src/assets"]
           }
         }
       }

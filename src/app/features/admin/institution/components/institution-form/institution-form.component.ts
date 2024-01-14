@@ -15,6 +15,9 @@ import { Institution } from "../../institution.model";
 export class InstitutionFormComponent implements OnDestroy {
   @Input()
   set id(value: string) {
+    if (!value) {
+      return;
+    }
     this.isLoading = true;
     const subscription = this.institutionFormService
       .get(value)

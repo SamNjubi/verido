@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { filter, takeUntil } from "rxjs/operators";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { filter, takeUntil, tap } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
 
@@ -12,6 +12,7 @@ import { InstitutionFormComponent } from "../institution-form/institution-form.c
 })
 export class InstitutionListComponent implements OnDestroy {
   private destroyed$ = new Subject();
+  private modal: NgbModalRef;
 
   constructor(route: ActivatedRoute, private modalService: NgbModal) {
     route.queryParamMap
@@ -19,20 +20,21 @@ export class InstitutionListComponent implements OnDestroy {
         filter((params) => params.has("modal")),
         takeUntil(this.destroyed$)
       )
-      .subscribe((params) => this.openModal(params.get("modal")));
+      .subscribe((params) => this.loadModal(params.get("modal")));
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
   }
 
-  private openModal(id?: string): void {
-    const modal = this.modalService.open(InstitutionFormComponent, {
+  private loadModal(id?: string): void {
+    this.modal && this.modal?.dismiss();
+    this.modal = this.modalService.open(InstitutionFormComponent, {
       backdrop: "static",
       centered: true,
       fullscreen: "sm",
     });
-    modal.componentInstance.id = id;
-    modal.closed.pipe(takeUntil(this.destroyed$)).subscribe((res) => {});
+    this.modal.componentInstance.id = id;
+    this.modal.closed.pipe(takeUntil(this.destroyed$)).subscribe((res) => {});
   }
 }

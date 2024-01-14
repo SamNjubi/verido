@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Institution } from "../../components/institution-form/institution-form.component";
+import { Institution } from "../../institution.model";
 
 @Injectable()
 export class InstitutionFormService {

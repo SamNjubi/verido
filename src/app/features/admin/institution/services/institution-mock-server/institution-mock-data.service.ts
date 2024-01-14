@@ -2,11 +2,7 @@ import { Injectable } from "@angular/core";
 import { InMemoryDbService, RequestInfo } from "angular-in-memory-web-api";
 import { Observable } from "rxjs";
 import { faker } from "@faker-js/faker";
-
-export interface Institution {
-  id: number;
-  name: string;
-}
+import { Institution } from "../../institution.model";
 
 @Injectable({
   providedIn: "root",

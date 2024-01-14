@@ -4,11 +4,7 @@ import { Subscription } from "rxjs";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { InstitutionFormService } from "../../services/institution-form/institution-form.service";
 import { finalize } from "rxjs/operators";
-
-export interface Institution {
-  id: number;
-  name: string;
-}
+import { Institution } from "../../institution.model";
 
 @Component({
   selector: "app-institution-form",

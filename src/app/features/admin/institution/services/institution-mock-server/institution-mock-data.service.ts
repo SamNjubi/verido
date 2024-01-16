@@ -12,7 +12,7 @@ export class InstitutionMockDataService implements InMemoryDbService {
 
   createDb(reqInfo?: RequestInfo): {} | Observable<{}> | Promise<{}> {
     const institutions: Institution[] = Array.from(
-      { length: 21 },
+      { length: 42 },
       (_, index) => ({
         id: index + 1,
         name: faker.company.name(),

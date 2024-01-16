@@ -1,30 +1,59 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, EventEmitter } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { BehaviorSubject, Subscription, Observable } from "rxjs";
+import { filter, finalize, switchMap, tap } from "rxjs/operators";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { filter, takeUntil, tap } from "rxjs/operators";
-import { Subject } from "rxjs";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
+import { InstitutionListService } from "../../services/institution-list/institution-list.service";
+import { Institution } from "../../institution.model";
+import {
+  InstitutionList,
+  InstitutionPagination,
+} from "./institution-list.model";
 
 @Component({
   selector: "app-institution-list",
   templateUrl: "./institution-list.component.html",
   styleUrls: ["./institution-list.component.scss"],
+  providers: [InstitutionListService],
 })
 export class InstitutionListComponent implements OnDestroy {
-  private destroyed$ = new Subject();
-  private modal: NgbModalRef;
+  isLoading: boolean;
+  rows: Institution[] = [];
+  columns = [{ name: "Name" }];
+  pagination = new InstitutionPagination();
+  paginate = new EventEmitter<InstitutionPagination>();
 
-  constructor(route: ActivatedRoute, private modalService: NgbModal) {
-    route.queryParamMap
-      .pipe(
-        filter((params) => params.has("modal")),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe((params) => this.loadModal(params.get("modal")));
+  private modal: NgbModalRef;
+  private subscription = new Subscription();
+  private paginate$ = new BehaviorSubject<any>(this.pagination);
+
+  constructor(
+    route: ActivatedRoute,
+    private modalService: NgbModal,
+    private institutionListService: InstitutionListService
+  ) {
+    this.subscription.add(
+      this.paginate.subscribe((pagination) => this.paginate$.next(pagination))
+    );
+    this.subscription.add(
+      this.paginate$
+        .asObservable()
+        .pipe(
+          tap(() => (this.isLoading = true)),
+          switchMap((page) => this.loadInstitutions(page))
+        )
+        .subscribe()
+    );
+    this.subscription.add(
+      route.queryParamMap
+        .pipe(filter((params) => params.has("modal")))
+        .subscribe((params) => this.loadModal(params.get("modal")))
+    );
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next();
+    this.subscription.unsubscribe();
   }
 
   private loadModal(id?: string): void {
@@ -35,6 +64,20 @@ export class InstitutionListComponent implements OnDestroy {
       fullscreen: "sm",
     });
     this.modal.componentInstance.id = id;
-    this.modal.closed.pipe(takeUntil(this.destroyed$)).subscribe((res) => {});
+    this.subscription.add(this.modal.closed.subscribe((res) => {}));
+  }
+
+  private loadInstitutions(
+    pagination: InstitutionPagination
+  ): Observable<InstitutionList> {
+    return this.institutionListService
+      .search(pagination.offset, pagination.limit)
+      .pipe(
+        tap((result) => {
+          this.rows = result.data;
+          this.pagination = result.pagination;
+        }),
+        finalize(() => (this.isLoading = false))
+      );
   }
 }

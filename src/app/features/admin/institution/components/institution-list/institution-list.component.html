@@ -1,1 +1,16 @@
-<p>institution-list works!</p>
+<ngx-datatable
+  class="material"
+  [loadingIndicator]="isLoading"
+  [rows]="rows"
+  [columns]="columns"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  rowHeight="auto"
+  [externalPaging]="true"
+  [count]="pagination.count"
+  [offset]="pagination.offset"
+  [limit]="pagination.limit"
+  (page)="paginate.emit($event)"
+>
+</ngx-datatable>

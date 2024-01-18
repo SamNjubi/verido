@@ -26,7 +26,9 @@ export class InstitutionListComponent implements OnDestroy {
 
   private modal: NgbModalRef;
   private subscription = new Subscription();
-  private paginate$ = new BehaviorSubject<any>(this.pagination);
+  private paginate$ = new BehaviorSubject<InstitutionPagination>(
+    this.pagination
+  );
 
   constructor(
     route: ActivatedRoute,

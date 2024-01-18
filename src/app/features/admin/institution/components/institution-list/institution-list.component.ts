@@ -1,6 +1,6 @@
 import { Component, OnDestroy, EventEmitter } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, Subscription, Observable } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BehaviorSubject, Subscription, Observable, race } from "rxjs";
 import { filter, finalize, switchMap, tap } from "rxjs/operators";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
@@ -32,6 +32,7 @@ export class InstitutionListComponent implements OnDestroy {
 
   constructor(
     route: ActivatedRoute,
+    private router: Router,
     private modalService: NgbModal,
     private institutionListService: InstitutionListService
   ) {
@@ -66,7 +67,11 @@ export class InstitutionListComponent implements OnDestroy {
       fullscreen: "sm",
     });
     this.modal.componentInstance.id = id;
-    this.subscription.add(this.modal.closed.subscribe((res) => {}));
+    this.subscription.add(
+      race(this.modal.closed, this.modal.dismissed).subscribe((res) =>
+        this.router.navigateByUrl("/admin/institution")
+      )
+    );
   }
 
   private loadInstitutions(

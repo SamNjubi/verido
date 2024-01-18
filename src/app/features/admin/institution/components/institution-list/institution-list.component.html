@@ -1,16 +1,42 @@
-<ngx-datatable
-  class="material"
-  [loadingIndicator]="isLoading"
-  [rows]="rows"
-  [columns]="columns"
-  [columnMode]="'force'"
-  [headerHeight]="50"
-  [footerHeight]="50"
-  rowHeight="auto"
-  [externalPaging]="true"
-  [count]="pagination.count"
-  [offset]="pagination.offset"
-  [limit]="pagination.limit"
-  (page)="paginate.emit($event)"
->
-</ngx-datatable>
+<div class="">
+  <div class="breadcrumb">
+    <h1>Institutions</h1>
+    <ul>
+      <li>
+        <a href="#">List</a>
+      </li>
+      <li>All</li>
+    </ul>
+  </div>
+  <div class="separator-breadcrumb border-top"></div>
+  <div class="flex">
+    <a
+      routerLink="."
+      [queryParams]="{ modal: '' }"
+      class="btn btn-dark btn-rounded m-1"
+      >Add</a
+    >
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <ngx-datatable
+          class="material"
+          [loadingIndicator]="isLoading"
+          [rows]="rows"
+          [columns]="columns"
+          [columnMode]="'force'"
+          [headerHeight]="50"
+          [footerHeight]="50"
+          rowHeight="auto"
+          [externalPaging]="true"
+          [count]="pagination.count"
+          [offset]="pagination.offset"
+          [limit]="pagination.limit"
+          (page)="paginate.emit($event)"
+        >
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>

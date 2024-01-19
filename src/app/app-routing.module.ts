@@ -7,6 +7,11 @@ import { AdminLayoutSidebarCompactComponent } from "./shared/components/layouts/
 
 const adminRoutes: Routes = [
   {
+    path: "admin",
+    loadChildren: () =>
+      import("./features/admin/admin.module").then((m) => m.AdminModule),
+  },
+  {
     path: "dashboard",
     loadChildren: () =>
       import("./views/dashboard/dashboard.module").then(
@@ -70,11 +75,6 @@ const adminRoutes: Routes = [
 ];
 
 const routes: Routes = [
-  {
-    path: "admin",
-    loadChildren: () =>
-      import("./features/admin/admin.module").then((m) => m.AdminModule),
-  },
   {
     path: "",
     redirectTo: "dashboard/v1",

@@ -1,4 +1,12 @@
-import { Component, OnDestroy, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  EventEmitter,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, Subscription, Observable, race } from "rxjs";
 import { filter, finalize, switchMap, tap } from "rxjs/operators";
@@ -10,6 +18,7 @@ import {
   InstitutionList,
   InstitutionPagination,
 } from "./institution-list.model";
+import { TableColumn } from "@swimlane/ngx-datatable";
 
 @Component({
   selector: "app-institution-list",
@@ -17,12 +26,15 @@ import {
   styleUrls: ["./institution-list.component.scss"],
   providers: [InstitutionListService],
 })
-export class InstitutionListComponent implements OnDestroy {
+export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   isLoading: boolean;
   rows: Institution[] = [];
-  columns = [{ name: "Name" }];
+  columns: TableColumn[];
   pagination = new InstitutionPagination();
   paginate = new EventEmitter<InstitutionPagination>();
+
+  @ViewChild("actionsCell")
+  actionsTemplateRef: TemplateRef<any>;
 
   private modal: NgbModalRef;
   private subscription = new Subscription();
@@ -33,6 +45,7 @@ export class InstitutionListComponent implements OnDestroy {
   constructor(
     route: ActivatedRoute,
     private router: Router,
+    private ref: ChangeDetectorRef,
     private modalService: NgbModal,
     private institutionListService: InstitutionListService
   ) {
@@ -53,6 +66,13 @@ export class InstitutionListComponent implements OnDestroy {
         .pipe(filter((params) => params.has("modal")))
         .subscribe((params) => this.loadModal(params.get("modal")))
     );
+  }
+  ngAfterViewInit(): void {
+    this.columns = [
+      { name: "Name" },
+      { name: "Actions", cellTemplate: this.actionsTemplateRef },
+    ];
+    this.ref.detectChanges();
   }
 
   ngOnDestroy(): void {

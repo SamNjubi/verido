@@ -7,16 +7,16 @@
       </li>
       <li>All</li>
     </ul>
+    <div class="actions flex-grow-1 d-flex justify-content-end">
+      <a
+        routerLink="."
+        [queryParams]="{ modal: '' }"
+        class="btn btn-dark btn-rounded m-1"
+        >Add</a
+      >
+    </div>
   </div>
   <div class="separator-breadcrumb border-top"></div>
-  <div class="flex">
-    <a
-      routerLink="."
-      [queryParams]="{ modal: '' }"
-      class="btn btn-dark btn-rounded m-1"
-      >Add</a
-    >
-  </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -36,6 +36,11 @@
           (page)="paginate.emit($event)"
         >
         </ngx-datatable>
+        <ng-template #actionsCell let-row="row">
+          <a routerLink="." [queryParams]="{ modal: row.id }">
+            <i class="i-File-Edit"></i>
+          </a>
+        </ng-template>
       </div>
     </div>
   </div>

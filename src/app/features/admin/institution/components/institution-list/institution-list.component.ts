@@ -49,23 +49,24 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private institutionListService: InstitutionListService
   ) {
-    this.subscription.add(
-      this.paginate.subscribe((pagination) => this.paginate$.next(pagination))
-    );
-    this.subscription.add(
-      this.paginate$
-        .asObservable()
-        .pipe(
-          tap(() => (this.isLoading = true)),
-          switchMap((page) => this.loadInstitutions(page))
-        )
-        .subscribe()
-    );
-    this.subscription.add(
-      route.queryParamMap
-        .pipe(filter((params) => params.has("modal")))
-        .subscribe((params) => this.loadModal(params.get("modal")))
-    );
+    this.subscription
+      .add(
+        this.paginate.subscribe((pagination) => this.paginate$.next(pagination))
+      )
+      .add(
+        this.paginate$
+          .asObservable()
+          .pipe(
+            tap(() => (this.isLoading = true)),
+            switchMap((page) => this.loadInstitutions(page))
+          )
+          .subscribe()
+      )
+      .add(
+        route.queryParamMap
+          .pipe(filter((params) => params.has("modal")))
+          .subscribe((params) => this.loadModal(params.get("modal")))
+      );
   }
   ngAfterViewInit(): void {
     this.columns = [

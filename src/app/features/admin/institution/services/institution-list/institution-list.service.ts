@@ -18,24 +18,28 @@ export class InstitutionListService {
   search(
     offset: number,
     limit: number,
-    sort: InstitutionSort[]
+    sort: InstitutionSort[],
+    search: string
   ): Observable<InstitutionList> {
     return this.http.get<Institution[]>(this.api).pipe(
       map((institutions) => {
         const [{ dir: sortDir, prop: sortColumn }] = sort;
-        const data = institutions
-          .sort(
-            (a, b) =>
-              a[sortColumn].localeCompare(b[sortColumn]) *
-              (sortDir === "asc" ? 1 : -1)
-          )
-          .slice(offset, (offset + 1) * limit);
+        const filtered = institutions.filter((x) =>
+          x.name.toLowerCase().startsWith(search.toLowerCase())
+        );
+        const sorted = filtered.sort(
+          (a, b) =>
+            a[sortColumn].localeCompare(b[sortColumn]) *
+            (sortDir === "asc" ? 1 : -1)
+        );
+        const count = filtered.length;
+        const sliced = sorted.slice(offset, (offset + 1) * limit);
         const pagination: InstitutionPagination = {
           offset,
           limit,
-          count: institutions.length,
+          count,
         };
-        return { data, pagination };
+        return { data: sliced, pagination };
       })
     );
   }

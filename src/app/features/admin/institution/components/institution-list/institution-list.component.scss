@@ -1,0 +1,23 @@
+.search-bar {
+  border: 1px solid #eee;
+  border-radius: 20px;
+  background: #f8f9fa;
+
+  input {
+    background: transparent;
+    border: 0;
+    color: #212121;
+    font-size: 0.8rem;
+    line-height: 2;
+    height: 100%;
+    outline: initial !important;
+    padding: 0.5rem 1rem;
+    width: calc(100% - 32px);
+  }
+
+  i {
+    font-size: 18px;
+    width: 24px;
+    display: inline-block;
+  }
+}

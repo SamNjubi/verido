@@ -8,6 +8,10 @@
       <li>All</li>
     </ul>
     <div class="actions flex-grow-1 d-flex justify-content-end">
+      <div class="search-bar d-flex justify-content-between align-items-center">
+        <input type="text" placeholder="Search" [formControl]="search" />
+        <i class="text-muted i-Magnifi-Glass1"></i>
+      </div>
       <a
         routerLink="."
         [queryParams]="{ modal: '' }"

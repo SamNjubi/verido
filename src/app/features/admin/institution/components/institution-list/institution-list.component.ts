@@ -15,7 +15,7 @@ import {
   race,
   combineLatest,
 } from "rxjs";
-import { filter, finalize, switchMap, tap } from "rxjs/operators";
+import { filter, finalize, startWith, switchMap, tap } from "rxjs/operators";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
 import { InstitutionListService } from "../../services/institution-list/institution-list.service";
@@ -26,6 +26,7 @@ import {
   InstitutionSort,
 } from "./institution-list.model";
 import { ColumnMode, TableColumn } from "@swimlane/ngx-datatable";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-institution-list",
@@ -41,6 +42,7 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   pagination = new InstitutionPagination();
   paginate = new EventEmitter<InstitutionPagination>();
   sort = new EventEmitter<any>();
+  search = new FormControl();
 
   @ViewChild("actionsCell")
   actionsTemplateRef: TemplateRef<any>;
@@ -70,10 +72,13 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
         combineLatest([
           this.paginate$.asObservable(),
           this.sort$.asObservable(),
+          this.search.valueChanges.pipe(startWith("")),
         ])
           .pipe(
             tap(() => (this.isLoading = true)),
-            switchMap(([page, sort]) => this.loadInstitutions(page, sort))
+            switchMap(([page, sort, search]) =>
+              this.loadInstitutions(page, sort, search)
+            )
           )
           .subscribe()
       )
@@ -122,10 +127,11 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
 
   private loadInstitutions(
     pagination: InstitutionPagination,
-    sort: InstitutionSort[]
+    sort: InstitutionSort[],
+    search: string
   ): Observable<InstitutionList> {
     return this.institutionListService
-      .search(pagination.offset, pagination.limit, sort)
+      .search(pagination.offset, pagination.limit, sort, search)
       .pipe(
         tap((result) => {
           this.rows = result.data;

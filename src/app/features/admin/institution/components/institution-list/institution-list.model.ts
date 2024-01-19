@@ -6,6 +6,11 @@ export class InstitutionPagination {
   count: number;
 }
 
+export class InstitutionSort {
+  dir: "asc" | "desc" = "asc";
+  prop: string = "name";
+}
+
 export interface InstitutionList {
   pagination: InstitutionPagination;
   data: Institution[];

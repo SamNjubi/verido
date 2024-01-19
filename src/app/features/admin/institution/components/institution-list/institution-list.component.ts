@@ -8,7 +8,13 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, Subscription, Observable, race } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  Observable,
+  race,
+  combineLatest,
+} from "rxjs";
 import { filter, finalize, switchMap, tap } from "rxjs/operators";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
@@ -17,6 +23,7 @@ import { Institution } from "../../institution.model";
 import {
   InstitutionList,
   InstitutionPagination,
+  InstitutionSort,
 } from "./institution-list.model";
 import { ColumnMode, TableColumn } from "@swimlane/ngx-datatable";
 
@@ -33,6 +40,7 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   columnMode = ColumnMode;
   pagination = new InstitutionPagination();
   paginate = new EventEmitter<InstitutionPagination>();
+  sort = new EventEmitter<any>();
 
   @ViewChild("actionsCell")
   actionsTemplateRef: TemplateRef<any>;
@@ -42,6 +50,9 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   private paginate$ = new BehaviorSubject<InstitutionPagination>(
     this.pagination
   );
+  private sort$ = new BehaviorSubject<InstitutionSort[]>([
+    new InstitutionSort(),
+  ]);
 
   constructor(
     route: ActivatedRoute,
@@ -51,15 +62,18 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
     private institutionListService: InstitutionListService
   ) {
     this.subscription
+      .add(this.sort.subscribe((sort) => this.sort$.next(sort)))
       .add(
         this.paginate.subscribe((pagination) => this.paginate$.next(pagination))
       )
       .add(
-        this.paginate$
-          .asObservable()
+        combineLatest([
+          this.paginate$.asObservable(),
+          this.sort$.asObservable(),
+        ])
           .pipe(
             tap(() => (this.isLoading = true)),
-            switchMap((page) => this.loadInstitutions(page))
+            switchMap(([page, sort]) => this.loadInstitutions(page, sort))
           )
           .subscribe()
       )
@@ -78,6 +92,7 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
       {
         name: "Actions",
         flexGrow: 1,
+        sortable: false,
         headerClass: "text-center",
         cellClass: "text-center",
         cellTemplate: this.actionsTemplateRef,
@@ -106,10 +121,11 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadInstitutions(
-    pagination: InstitutionPagination
+    pagination: InstitutionPagination,
+    sort: InstitutionSort[]
   ): Observable<InstitutionList> {
     return this.institutionListService
-      .search(pagination.offset, pagination.limit)
+      .search(pagination.offset, pagination.limit, sort)
       .pipe(
         tap((result) => {
           this.rows = result.data;

@@ -30,10 +30,12 @@
           [footerHeight]="50"
           rowHeight="auto"
           [externalPaging]="true"
+          [externalSorting]="true"
           [count]="pagination.count"
           [offset]="pagination.offset"
           [limit]="pagination.limit"
           (page)="paginate.emit($event)"
+          (sort)="sort.emit($event.sorts)"
         >
         </ngx-datatable>
         <ng-template #actionsCell let-row="row">

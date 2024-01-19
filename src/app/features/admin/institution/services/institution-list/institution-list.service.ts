@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 import {
   InstitutionList,
   InstitutionPagination,
+  InstitutionSort,
 } from "../../components/institution-list/institution-list.model";
 import { Institution } from "../../institution.model";
 
@@ -14,10 +15,21 @@ export class InstitutionListService {
 
   constructor(private http: HttpClient) {}
 
-  search(offset: number, limit: number): Observable<InstitutionList> {
+  search(
+    offset: number,
+    limit: number,
+    sort: InstitutionSort[]
+  ): Observable<InstitutionList> {
     return this.http.get<Institution[]>(this.api).pipe(
       map((institutions) => {
-        const data = institutions.slice(offset, (offset + 1) * limit);
+        const [{ dir: sortDir, prop: sortColumn }] = sort;
+        const data = institutions
+          .sort(
+            (a, b) =>
+              a[sortColumn].localeCompare(b[sortColumn]) *
+              (sortDir === "asc" ? 1 : -1)
+          )
+          .slice(offset, (offset + 1) * limit);
         const pagination: InstitutionPagination = {
           offset,
           limit,

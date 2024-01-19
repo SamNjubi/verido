@@ -18,7 +18,7 @@ import {
   InstitutionList,
   InstitutionPagination,
 } from "./institution-list.model";
-import { TableColumn } from "@swimlane/ngx-datatable";
+import { ColumnMode, TableColumn } from "@swimlane/ngx-datatable";
 
 @Component({
   selector: "app-institution-list",
@@ -30,6 +30,7 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   isLoading: boolean;
   rows: Institution[] = [];
   columns: TableColumn[];
+  columnMode = ColumnMode;
   pagination = new InstitutionPagination();
   paginate = new EventEmitter<InstitutionPagination>();
 
@@ -70,8 +71,17 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.columns = [
-      { name: "Name" },
-      { name: "Actions", cellTemplate: this.actionsTemplateRef },
+      {
+        name: "Name",
+        flexGrow: 6,
+      },
+      {
+        name: "Actions",
+        flexGrow: 1,
+        headerClass: "text-center",
+        cellClass: "text-center",
+        cellTemplate: this.actionsTemplateRef,
+      },
     ];
     this.ref.detectChanges();
   }

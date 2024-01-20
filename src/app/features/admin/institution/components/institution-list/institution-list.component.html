@@ -54,8 +54,15 @@
           </span>
         </ng-template>
         <ng-template #actionsCell let-row="row">
-          <a routerLink="." [queryParams]="{ modal: row.id }">
+          <a
+            routerLink="."
+            [queryParams]="{ modal: row.id }"
+            class="d-inline-block mx-1"
+          >
             <i class="i-File-Edit"></i>
+          </a>
+          <a href="" class="d-inline-block mx-1">
+            <i class="i-Remove-File"></i>
           </a>
         </ng-template>
       </div>

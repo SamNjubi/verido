@@ -10,9 +10,10 @@ import { InstitutionRoutingModule } from "./institution-routing.module";
 import { InstitutionListComponent } from "./components/institution-list/institution-list.component";
 import { InstitutionFormComponent } from "./components/institution-form/institution-form.component";
 import { InstitutionMockDataService } from "./services/institution-mock-server/institution-mock-data.service";
+import { InstitutionDeleteComponent } from './components/institution-delete/institution-delete.component';
 
 @NgModule({
-  declarations: [InstitutionListComponent, InstitutionFormComponent],
+  declarations: [InstitutionListComponent, InstitutionFormComponent, InstitutionDeleteComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -8,6 +8,7 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FormControl } from "@angular/forms";
 import {
   BehaviorSubject,
   Subscription,
@@ -16,6 +17,7 @@ import {
   combineLatest,
 } from "rxjs";
 import { filter, finalize, startWith, switchMap, tap } from "rxjs/operators";
+import { ColumnMode, TableColumn } from "@swimlane/ngx-datatable";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { InstitutionFormComponent } from "../institution-form/institution-form.component";
 import { InstitutionListService } from "../../services/institution-list/institution-list.service";
@@ -25,8 +27,6 @@ import {
   InstitutionPagination,
   InstitutionSort,
 } from "./institution-list.model";
-import { ColumnMode, TableColumn } from "@swimlane/ngx-datatable";
-import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-institution-list",

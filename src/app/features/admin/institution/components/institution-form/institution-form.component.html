@@ -12,7 +12,7 @@
     owners.
   </p>
   <form [formGroup]="form">
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="name">Name</label>
       <input
         id="name"
@@ -27,6 +27,24 @@
         >
       </ng-container>
     </div>
+    <label
+      *ngFor="let status of ['active', 'suspended', 'deleted']"
+      class="radio radio-dark"
+    >
+      <input
+        formControlName="radio"
+        type="radio"
+        [value]="status"
+        [checked]="form.get('status').value === status"
+      />
+      <span>{{ status | titlecase }}</span>
+      <span class="checkmark"></span>
+    </label>
+    <ng-container *ngIf="isInvalid('status')">
+      <small *ngIf="hasError('status', 'required')" class="text-danger"
+        >Status is required</small
+      >
+    </ng-container>
   </form>
 </div>
 <div class="modal-footer">

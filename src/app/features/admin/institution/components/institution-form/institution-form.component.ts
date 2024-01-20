@@ -30,6 +30,7 @@ export class InstitutionFormComponent implements OnDestroy {
   isSaving = false;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
+    status: new FormControl("", [Validators.required]),
   });
 
   private subscription = new Subscription();

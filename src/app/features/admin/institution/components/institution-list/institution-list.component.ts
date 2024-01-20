@@ -88,6 +88,7 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
           .subscribe((params) => this.loadModal(params.get("modal")))
       );
   }
+
   ngAfterViewInit(): void {
     this.columns = [
       {

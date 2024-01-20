@@ -44,8 +44,8 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
   sort = new EventEmitter<any>();
   search = new FormControl();
 
-  @ViewChild("actionsCell")
-  actionsTemplateRef: TemplateRef<any>;
+  @ViewChild("statusCell") statusTemplateRef: TemplateRef<any>;
+  @ViewChild("actionsCell") actionsTemplateRef: TemplateRef<any>;
 
   private modal: NgbModalRef;
   private subscription = new Subscription();
@@ -92,7 +92,12 @@ export class InstitutionListComponent implements AfterViewInit, OnDestroy {
     this.columns = [
       {
         name: "Name",
-        flexGrow: 6,
+        flexGrow: 4,
+      },
+      {
+        name: "Status",
+        flexGrow: 2,
+        cellTemplate: this.statusTemplateRef,
       },
       {
         name: "Actions",

@@ -16,6 +16,7 @@ export class InstitutionMockDataService implements InMemoryDbService {
       (_, index) => ({
         id: index + 1,
         name: faker.company.name(),
+        status: index % 2 ? "active" : index % 4 ? "deleted" : "suspended",
       })
     );
     return { institutions };

@@ -42,6 +42,17 @@
           (sort)="sort.emit($event.sorts)"
         >
         </ngx-datatable>
+        <ng-template #statusCell let-value="value">
+          <span
+            [ngClass]="{
+            'text-success': value === 'active',
+            'text-warning': value === 'suspended',
+            'text-danger': value === 'deleted',
+          }"
+          >
+            {{ value | titlecase }}
+          </span>
+        </ng-template>
         <ng-template #actionsCell let-row="row">
           <a routerLink="." [queryParams]="{ modal: row.id }">
             <i class="i-File-Edit"></i>
